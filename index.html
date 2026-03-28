@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindScreen — Clinical Mental Health Assessments</title>
+  <meta name="description"
+    content="Premium clinical mental health screening platform featuring GAD-7, PHQ-9, PCL-5, AUDIT-C, and more validated questionnaires.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="ambient-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo" id="logoHome">
+        <div class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="12" stroke="url(#g1)" stroke-width="2.5" />
+            <path d="M9 14.5c1-3 3-5 5-5s4 2 5 5" stroke="url(#g1)" stroke-width="2" stroke-linecap="round" />
+            <circle cx="14" cy="18" r="1.5" fill="#a78bfa" />
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="28" y2="28">
+                <stop stop-color="#a78bfa" />
+                <stop offset="1" stop-color="#6366f1" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <h1>MindScreen</h1>
+          <span class="subtitle">Clinical Screening Assessments</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="historyToggle" class="btn-icon" title="Assessment History"><svg width="20" height="20"
+            viewBox="0 0 20 20" fill="none">
+            <path d="M10 4v6l4 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" />
+          </svg></button>
+        <button id="printBtn" class="btn-icon" title="Print / Export"><svg width="20" height="20" viewBox="0 0 20 20"
+            fill="none">
+            <path d="M5 7V3h10v4M5 13h10v4H5zM3 7h14v6H3z" stroke="currentColor" stroke-width="1.5"
+              stroke-linejoin="round" />
+          </svg></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME VIEW -->
+    <div id="homeView" class="home-view active">
+      <div class="home-hero">
+        <h2>Clinical Screening Tools</h2>
+        <p>Validated, evidence-based mental health assessments — beautifully designed for clinicians and patients.</p>
+      </div>
+      <div id="quizCatalog"></div>
+    </div>
+
+    <!-- CALCULATOR VIEW -->
+    <div id="calcView" class="calc-view">
+      <button class="back-btn" id="backBtn">← Back to All Assessments</button>
+      <div class="calc-header" id="calcHeader"></div>
+
+      <section class="glass-card about-section" id="aboutSection"></section>
+
+      <div class="progress-wrapper glass-card">
+        <div class="progress-header">
+          <span class="progress-label">Completion</span>
+          <span class="progress-count" id="progressCount">0 / 0</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <section class="glass-card questions-card" id="questionsCard">
+        <div class="questions-intro" id="questionsIntro"></div>
+        <div id="questionsContainer"></div>
+        <div id="followUpContainer"></div>
+      </section>
+
+      <section class="glass-card results-card" id="resultsCard">
+        <div class="results-header">
+          <h2>Your Score</h2>
+          <div class="results-actions">
+            <button id="resetBtn" class="btn-secondary">Reset</button>
+            <button id="saveBtn" class="btn-primary" disabled>Save Assessment</button>
+          </div>
+        </div>
+        <div class="score-display">
+          <div class="score-gauge">
+            <svg viewBox="0 0 120 120" class="gauge-svg">
+              <circle cx="60" cy="60" r="52" class="gauge-track" />
+              <circle cx="60" cy="60" r="52" class="gauge-fill" id="gaugeFill" />
+            </svg>
+            <div class="score-number" id="scoreNumber">0</div>
+            <div class="score-max" id="scoreMax">/ 0</div>
+          </div>
+          <div class="severity-info">
+            <div class="severity-badge" id="severityBadge">Select answers</div>
+            <p class="severity-desc" id="severityDesc">Answer all questions to receive your assessment.</p>
+            <p class="management-note" id="managementNote"></p>
+          </div>
+        </div>
+        <div class="severity-scale" id="severityScale"></div>
+      </section>
+
+      <section class="glass-card tabs-card" id="tabsCard">
+        <div class="tabs-nav" role="tablist">
+          <button class="tab-btn active" data-tab="nextsteps" role="tab">Next Steps</button>
+          <button class="tab-btn" data-tab="evidence" role="tab">Evidence</button>
+          <button class="tab-btn" data-tab="creator" role="tab">Creator Insights</button>
+        </div>
+        <div class="tab-panel active" id="tab-nextsteps" role="tabpanel"></div>
+        <div class="tab-panel" id="tab-evidence" role="tabpanel"></div>
+        <div class="tab-panel" id="tab-creator" role="tabpanel"></div>
+      </section>
+    </div>
+
+    <!-- HISTORY PANEL -->
+    <section class="glass-card history-card hidden" id="historyPanel">
+      <div class="history-header">
+        <h2>Assessment History</h2>
+        <button id="clearHistory" class="btn-secondary btn-sm">Clear All</button>
+      </div>
+      <div id="historyChart" class="history-chart"></div>
+      <div id="historyList" class="history-list">
+        <p class="empty-state">No assessments saved yet.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>This tool is for educational and screening purposes only. It does not constitute medical advice. Always consult a
+      qualified healthcare professional for diagnosis and treatment.</p>
+  </footer>
+
+  <script src="questionnaires.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
