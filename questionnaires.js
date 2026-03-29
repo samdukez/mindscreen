@@ -1377,5 +1377,105 @@ const QUESTIONNAIRES = {
             ]
         },
         creator: { name: "Dr. Soo Borson, MD", title: "University of Washington", initials: "SB", bio: "Dr. Borson developed the Mini-Cog to provide a brief, language-independent cognitive screening tool that could be used across diverse populations in busy clinical settings." }
+    },
+
+    // ─── ASRS v1.1 Screener ───
+    "asrs": {
+        id: "asrs",
+        name: "ASRS",
+        fullName: "Adult ADHD Self-Report Scale v1.1 — Screener",
+        category: "ADHD",
+        categoryColor: "#fb923c",
+        description: "WHO-developed screener for adult Attention Deficit Hyperactivity Disorder (ADHD).",
+        timeframe: "Over the last 6 months",
+        maxScore: 6,
+        questions: [
+            "How often do you have trouble wrapping up the final details of a project, once the challenging parts have been done?",
+            "How often do you have difficulty getting things in order when you have to do a task that requires organization?",
+            "How often do you have problems remembering appointments or obligations?",
+            "When you have a task that requires a lot of thought, how often do you avoid or delay getting started?",
+            "How often do you fidget or squirm with your hands or feet when you have to sit down for a long time?",
+            "How often do you feel overly active and compelled to do things, like you were driven by a motor?"
+        ],
+        optionsByQuestion: {
+            0: [
+                { label: "Never", value: 0 },
+                { label: "Rarely", value: 0 },
+                { label: "Sometimes", value: 1 },
+                { label: "Often", value: 1 },
+                { label: "Very Often", value: 1 }
+            ],
+            1: [
+                { label: "Never", value: 0 },
+                { label: "Rarely", value: 0 },
+                { label: "Sometimes", value: 1 },
+                { label: "Often", value: 1 },
+                { label: "Very Often", value: 1 }
+            ],
+            2: [
+                { label: "Never", value: 0 },
+                { label: "Rarely", value: 0 },
+                { label: "Sometimes", value: 1 },
+                { label: "Often", value: 1 },
+                { label: "Very Often", value: 1 }
+            ],
+            3: [
+                { label: "Never", value: 0 },
+                { label: "Rarely", value: 0 },
+                { label: "Sometimes", value: 0 },
+                { label: "Often", value: 1 },
+                { label: "Very Often", value: 1 }
+            ],
+            4: [
+                { label: "Never", value: 0 },
+                { label: "Rarely", value: 0 },
+                { label: "Sometimes", value: 0 },
+                { label: "Often", value: 1 },
+                { label: "Very Often", value: 1 }
+            ],
+            5: [
+                { label: "Never", value: 0 },
+                { label: "Rarely", value: 0 },
+                { label: "Sometimes", value: 0 },
+                { label: "Often", value: 1 },
+                { label: "Very Often", value: 1 }
+            ]
+        },
+        interpretation: [
+            { min: 0, max: 3, severity: "Negative Screen", color: "#10b981", recommendation: "ADHD unlikely based on this screen. Symptoms do not meet screening threshold." },
+            { min: 4, max: 6, severity: "Positive Screen", color: "#ef4444", recommendation: "Symptoms are highly consistent with ADHD in adults. Further detailed clinical evaluation is warranted." }
+        ],
+        about: {
+            whenToUse: "Use in adults (≥18 years) who present with complaints of inattention, disorganization, restlessness, or difficulty completing tasks. Also useful for screening when ADHD is suspected as a comorbidity in anxiety/depression.",
+            pearlsPitfalls: [
+                "This is the 6-item Part A screener, not the full 18-item ASRS.",
+                "Uses the WHO 'shaded box' scoring: Q1–3 threshold is 'Sometimes'; Q4–6 threshold is 'Often'.",
+                "≥4 items in the shaded zone = positive screen.",
+                "High sensitivity for adult ADHD but does NOT diagnose — requires comprehensive clinical evaluation.",
+                "ADHD frequently co-occurs with anxiety, depression, and substance use disorders."
+            ],
+            whyUse: "The ASRS is the WHO's recommended screening instrument for adult ADHD. It takes under 5 minutes and is the most widely used adult ADHD screener worldwide."
+        },
+        nextSteps: {
+            management: [
+                { label: "Score <4", text: "Negative screen. ADHD unlikely, but if clinical suspicion persists, consider full evaluation." },
+                { label: "Score ≥4", text: "Positive screen. Refer for comprehensive ADHD evaluation including: developmental/childhood history, collateral information, assessment of functional impairment, and rule out other conditions (anxiety, depression, sleep disorders, thyroid)." }
+            ],
+            criticalActions: "A positive ASRS screen is not diagnostic. DSM-5 ADHD diagnosis requires: (1) symptom onset before age 12, (2) symptoms in ≥2 settings, (3) clear functional impairment, and (4) symptoms not better explained by another condition."
+        },
+        evidence: {
+            formula: "WHO 'shaded box' method — Q1–3: positive if 'Sometimes' or higher; Q4–6: positive if 'Often' or higher. Count items in shaded zone. Range: 0–6. Cutoff: ≥4 = positive screen.",
+            facts: [
+                { label: "Sensitivity", value: "68.7% for ADHD" },
+                { label: "Specificity", value: "99.5%" },
+                { label: "Total classification accuracy", value: "97.9%" },
+                { label: "Validation", value: "Validated against clinical ADHD diagnosis in 154 patients (Kessler 2005)" }
+            ],
+            references: [
+                "Kessler RC, Adler L, Ames M, et al. The World Health Organization Adult ADHD Self-Report Scale (ASRS): a short screening scale for use in the general population. Psychol Med. 2005;35(2):245–256.",
+                "Kessler RC, Adler LA, Gruber MJ, et al. Validity of the WHO Adult ADHD Self-Report Scale (ASRS) Screener in a representative community sample. Psychol Med. 2007;37(7):981–993."
+            ]
+        },
+        creator: { name: "Dr. Ronald C. Kessler, PhD", title: "Harvard Medical School", initials: "RK", bio: "Dr. Kessler developed the ASRS in collaboration with the World Health Organization to provide a brief, validated screening tool for adult ADHD. He is one of the most highly cited researchers in psychiatry and psychiatric epidemiology." }
     }
 };
