@@ -1397,6 +1397,14 @@ const QUESTIONNAIRES = {
             "How often do you fidget or squirm with your hands or feet when you have to sit down for a long time?",
             "How often do you feel overly active and compelled to do things, like you were driven by a motor?"
         ],
+        questions_es: [
+            "¿Con qué frecuencia tiene dificultad para terminar los detalles finales de un proyecto una vez que ha terminado las partes más difíciles?",
+            "¿Con qué frecuencia tiene dificultad para organizar las cosas cuando tiene que hacer algo que requiere de organización?",
+            "¿Con qué frecuencia tiene problemas para recordar citas u obligaciones?",
+            "Cuando tiene que realizar una tarea que requiere concentrarse o pensar mucho, ¿con qué frecuencia la evita o la retrasa?",
+            "¿Con qué frecuencia mueve las manos o los pies inquieta o nerviosamente cuando tiene que permanecer sentado/a durante mucho tiempo?",
+            "¿Con qué frecuencia se siente excesivamente activo/a y con la necesidad de hacer cosas, como si un motor lo/la impulsara?"
+        ],
         optionsByQuestion: {
             0: [
                 { label: "Never", value: 0 },

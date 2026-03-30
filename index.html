@@ -42,6 +42,17 @@
         </div>
       </div>
       <div class="header-actions">
+        <button id="langToggle" class="btn-icon" title="Toggle Language (EN/ES)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m5 8 6 6" />
+            <path d="m4 14 6-6 2-3" />
+            <path d="M2 5h12" />
+            <path d="M7 2h1" />
+            <path d="m22 22-5-10-5 10" />
+            <path d="M14 18h6" />
+          </svg>
+        </button>
         <button id="historyToggle" class="btn-icon" title="Assessment History"><svg width="20" height="20"
             viewBox="0 0 20 20" fill="none">
             <path d="M10 4v6l4 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -71,28 +82,65 @@
       <button class="back-btn" id="backBtn">← Back to All Assessments</button>
       <div class="calc-header" id="calcHeader"></div>
 
-      <section class="glass-card about-section" id="aboutSection"></section>
-
-      <div class="progress-wrapper glass-card">
-        <div class="progress-header">
-          <span class="progress-label">Completion</span>
-          <span class="progress-count" id="progressCount">0 / 0</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-      </div>
-
-      <section class="glass-card questions-card" id="questionsCard">
-        <div class="questions-intro" id="questionsIntro"></div>
-        <div id="questionsContainer"></div>
-        <div id="followUpContainer"></div>
+      <!-- INTAKE FORM (New) -->
+      <section class="glass-card intake-section active" id="intakeSection">
+        <h3 id="ui_intake_title">Patient Information</h3>
+        <p class="intake-desc" id="ui_intake_desc">Please provide your details before beginning the assessment.</p>
+        <form id="intakeForm" class="intake-form">
+          <div class="form-group">
+            <label for="patientName" id="ui_label_name">Full Name</label>
+            <input type="text" id="patientName" placeholder="e.g. Jane Doe" required>
+          </div>
+          <div class="form-group">
+            <label for="patientDob" id="ui_label_dob">Date of Birth</label>
+            <input type="date" id="patientDob" required>
+          </div>
+          <div class="form-group" style="text-align: center; padding-top: 8px;">
+            <p style="font-size: 13px; color: var(--text-dim); margin-bottom: 8px;" id="ui_lang_ask">Prefer Spanish? /
+              ¿Prefiere español?</p>
+            <button type="button" class="btn-secondary" id="intakeLangToggle"
+              style="width: 100%; border-radius: var(--radius-sm); border-color: rgba(167,139,250,0.5); color: #fff;">🇪🇸
+              Cambiar a Español</button>
+          </div>
+          <button type="submit" class="btn-primary start-btn" id="ui_btn_start">Start Questionnaire</button>
+        </form>
       </section>
 
-      <section class="glass-card results-card" id="resultsCard">
+      <!-- QUESTIONS CONTAINER -->
+      <div id="questionsWrapper" class="hidden">
+        <section class="glass-card about-section" id="aboutSection"></section>
+
+        <div class="progress-wrapper glass-card">
+          <div class="progress-header">
+            <span class="progress-label">Completion</span>
+            <span class="progress-count" id="progressCount">0 / 0</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <section class="glass-card questions-card" id="questionsCard">
+          <div class="questions-intro" id="questionsIntro"></div>
+          <div id="questionsContainer"></div>
+          <div id="followUpContainer"></div>
+      </div>
+
+      <!-- PATIENT COMPLETED SCREEN (New) -->
+      <section class="glass-card patient-completed hidden" id="patientCompletedScreen">
+        <div class="completed-icon">✓</div>
+        <h2 id="ui_completed_title">Thank You</h2>
+        <p id="ui_completed_desc">Your responses have been recorded. Please hand the device back to your clinician.</p>
+        <button id="clinicianUnlockBtn" class="btn-secondary unlock-btn">Clinician: View Results</button>
+      </section>
+
+      <!-- RESULTS PANEL (Clinician Only) -->
+      <section class="glass-card results-card hidden" id="resultsCard">
         <div class="results-header">
           <h2>Your Score</h2>
           <div class="results-actions">
+            <!-- Email Submit button (New) -->
+            <button id="emailResultsBtn" class="btn-primary" disabled>✉ Email to Staff</button>
             <button id="resetBtn" class="btn-secondary">Reset</button>
             <button id="saveBtn" class="btn-primary" disabled>Save Assessment</button>
           </div>
@@ -125,6 +173,7 @@
         <div class="tab-panel" id="tab-evidence" role="tabpanel"></div>
         <div class="tab-panel" id="tab-creator" role="tabpanel"></div>
       </section>
+
     </div>
 
     <!-- HISTORY PANEL -->

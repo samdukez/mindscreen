@@ -6,6 +6,20 @@
     let currentQuiz = null;
     let answers = {};
     let followUpAnswers = {};
+    let patient = { name: '', dob: '' };
+    let isSpanish = false;
+
+    // ─── Translations ───
+    const i18n = {
+        "Patient Information": "Información del Paciente",
+        "Please provide your details before beginning the assessment.": "Por favor, proporcione sus datos antes de comenzar la evaluación.",
+        "Full Name": "Nombre Completo",
+        "Date of Birth": "Fecha de Nacimiento",
+        "Start Questionnaire": "Comenzar Cuestionario",
+        "Thank You": "Gracias",
+        "Your responses have been recorded. Please hand the device back to your clinician.": "Sus respuestas han sido registradas. Por favor, devuelva el dispositivo a su médico."
+    };
+    function t(str) { return isSpanish && i18n[str] ? i18n[str] : str; }
 
     // ─── DOM Cache ───
     const $ = id => document.getElementById(id);
@@ -17,7 +31,18 @@
     function init() {
         renderCatalog();
         bindGlobalEvents();
+        updateUILanguage();
         showHome();
+    }
+
+    function updateUILanguage() {
+        $('ui_intake_title').textContent = t("Patient Information");
+        $('ui_intake_desc').textContent = t("Please provide your details before beginning the assessment.");
+        $('ui_label_name').textContent = t("Full Name");
+        $('ui_label_dob').textContent = t("Date of Birth");
+        $('ui_btn_start').textContent = t("Start Questionnaire");
+        $('ui_completed_title').textContent = t("Thank You");
+        $('ui_completed_desc').textContent = t("Your responses have been recorded. Please hand the device back to your clinician.");
     }
 
     // ═══════════════════════════
@@ -67,9 +92,23 @@
         if (!currentQuiz) return;
         answers = {};
         followUpAnswers = {};
+        patient = { name: '', dob: '' };
+
+        // Reset inputs
+        $('patientName').value = '';
+        $('patientDob').value = '';
+
+        // Reset views for Kiosk mode
+        $('intakeSection').classList.add('active');
+        $('questionsWrapper').classList.add('hidden');
+        $('patientCompletedScreen').classList.add('hidden');
+        $('resultsCard').classList.add('hidden');
+        $('tabsCard').classList.add('hidden');
+
         homeView.classList.remove('active');
         calcView.classList.add('active');
         document.title = `${currentQuiz.name} — MindScreen`;
+
         renderCalculator();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -88,14 +127,21 @@
 
         // Questions intro
         $('questionsIntro').innerHTML = q.timeframe
-            ? `<p><strong>${q.timeframe}</strong>, how often have you been bothered by the following?</p>`
-            : `<p>Please answer each question below:</p>`;
+            ? `<p><strong>${isSpanish && q.timeframe_es ? q.timeframe_es : q.timeframe}</strong>, ${isSpanish ? "con qué frecuencia le ha molestado lo siguiente:" : "how often have you been bothered by the following?"}</p>`
+            : `<p>${isSpanish ? "Por favor responda cada pregunta a continuación:" : "Please answer each question below:"}</p>`;
 
         // Questions
         renderQuestions(q);
 
         // Follow-up (MDQ)
         renderFollowUp(q);
+
+        // Submit Button (inserted at end of questions)
+        const submitHtml = `<div class="question-block" style="text-align: center; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 32px;">
+            <button id="patientSubmitBtn" class="btn-primary" style="font-size:18px; padding:16px 40px;" disabled>${t("Save & Submit") || (isSpanish ? "Guardar y Enviar" : "Save & Submit")}</button>
+        </div>`;
+        $('questionsContainer').insertAdjacentHTML('beforeend', submitHtml);
+        $('patientSubmitBtn').addEventListener('click', handlePatientSubmit);
 
         // Score max
         $('scoreMax').textContent = `/ ${q.maxScore}`;
@@ -150,13 +196,18 @@
 
     function renderQuestions(q) {
         let html = '';
-        q.questions.forEach((text, i) => {
-            const opts = q.optionsByQuestion ? q.optionsByQuestion[i] : q.options;
+        const questionsList = isSpanish && q.questions_es ? q.questions_es : q.questions;
+
+        questionsList.forEach((text, i) => {
+            const optsSource = isSpanish && q.optionsByQuestion_es ? q.optionsByQuestion_es : q.optionsByQuestion;
+            const fallbackOpts = isSpanish && q.options_es ? q.options_es : q.options;
+
+            const opts = optsSource ? optsSource[i] : fallbackOpts;
             const optHtml = opts.map((o, oi) =>
                 `<button class="option-btn" data-q="${i}" data-val="${o.value}" data-oi="${oi}">${o.label}</button>`
             ).join('');
             html += `<div class="question-block" style="animation-delay:${i * 0.05}s">
-        <div class="q-number">Question ${i + 1}</div>
+        <div class="q-number">${isSpanish ? "Pregunta" : "Question"} ${i + 1}</div>
         <p class="q-text">${text}</p>
         <div class="options-grid">${optHtml}</div>
       </div>`;
@@ -342,6 +393,10 @@
                 $('managementNote').textContent = '';
             }
             $('saveBtn').disabled = false;
+            $('emailResultsBtn').disabled = false;
+
+            const pSubmit = $('patientSubmitBtn');
+            if (pSubmit) pSubmit.disabled = false;
         } else {
             gaugeFill.style.stroke = 'var(--accent)';
             $('severityBadge').textContent = 'In Progress';
@@ -350,7 +405,17 @@
             $('severityDesc').textContent = `Answer all ${total} questions to receive your assessment.`;
             $('managementNote').textContent = '';
             $('saveBtn').disabled = true;
+            $('emailResultsBtn').disabled = true;
+
+            const pSubmit = $('patientSubmitBtn');
+            if (pSubmit) pSubmit.disabled = true;
         }
+    }
+
+    function handlePatientSubmit() {
+        $('questionsWrapper').classList.add('hidden');
+        $('patientCompletedScreen').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // ═══════════════════════════
@@ -393,6 +458,74 @@
         // Back button
         $('backBtn').addEventListener('click', showHome);
         $('logoHome').addEventListener('click', showHome);
+
+        // Header Language Toggle (if it exists)
+        const langToggle = $('langToggle');
+        if (langToggle) {
+            langToggle.addEventListener('click', () => {
+                isSpanish = !isSpanish;
+                updateUILanguage();
+                if (currentQuiz && !$('questionsWrapper').classList.contains('hidden')) {
+                    renderCalculator();
+                }
+            });
+        }
+
+        // Intake Language Toggle
+        const intakeLangToggle = $('intakeLangToggle');
+        if (intakeLangToggle) {
+            intakeLangToggle.addEventListener('click', () => {
+                isSpanish = !isSpanish;
+                updateUILanguage();
+                intakeLangToggle.innerHTML = isSpanish ? "🇺🇸 Switch to English" : "🇪🇸 Cambiar a Español";
+                const langAsk = $('ui_lang_ask');
+                if (langAsk) langAsk.textContent = isSpanish ? "Prefer English?" : "Prefer Spanish? / ¿Prefiere español?";
+            });
+        }
+
+        // Intake Form Submit
+        $('intakeForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            patient.name = $('patientName').value.trim();
+            patient.dob = $('patientDob').value;
+
+            $('intakeSection').classList.remove('active');
+            $('intakeSection').classList.add('hidden');
+            $('questionsWrapper').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Clinician Unlock
+        $('clinicianUnlockBtn').addEventListener('click', () => {
+            // Optional: You could add a prompt() here for a PIN code:
+            // if (prompt("Enter Clinician PIN:") !== "1234") return alert("Incorrect PIN");
+
+            $('patientCompletedScreen').classList.add('hidden');
+            $('resultsCard').classList.remove('hidden');
+            $('tabsCard').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Email Results
+        $('emailResultsBtn').addEventListener('click', () => {
+            if (!currentQuiz) return;
+            const score = computeScore();
+            const interp = getInterpretation(score);
+
+            const subject = encodeURIComponent(`MindScreen Results: ${patient.name} - ${currentQuiz.name}`);
+            const body = encodeURIComponent(
+                `Patient Name: ${patient.name}\n` +
+                `DOB: ${patient.dob}\n\n` +
+                `Assessment: ${currentQuiz.fullName}\n` +
+                `Date: ${new Date().toLocaleDateString()}\n\n` +
+                `Score: ${score} / ${currentQuiz.maxScore}\n` +
+                `Interpretation: ${interp ? interp.severity : 'N/A'}\n` +
+                `Recommendation: ${interp ? interp.recommendation : 'N/A'}\n\n` +
+                `Detailed responses attached to patient chart.`
+            );
+
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        });
 
         // Tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
