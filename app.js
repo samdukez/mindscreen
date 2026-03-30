@@ -103,7 +103,8 @@
         $('patientName').value = '';
         $('patientDob').value = '';
 
-        // Reset views for Kiosk mode
+        // Reset views for Kiosk mode — clear ALL state from previous quiz
+        $('intakeSection').classList.remove('hidden');
         $('intakeSection').classList.add('active');
         $('questionsWrapper').classList.add('hidden');
         $('patientCompletedScreen').classList.add('hidden');
