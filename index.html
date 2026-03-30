@@ -3,14 +3,24 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>MindScreen — Clinical Mental Health Assessments</title>
   <meta name="description"
     content="Premium clinical mental health screening platform featuring GAD-7, PHQ-9, PCL-5, AUDIT-C, and more validated questionnaires.">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#a78bfa">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MindScreen">
+  <link rel="apple-touch-icon" href="icon-192.svg">
+
+  <!-- Fonts & Styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=2.0">
+  <link rel="stylesheet" href="styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
@@ -195,9 +205,27 @@
       qualified healthcare professional for diagnosis and treatment.</p>
   </footer>
 
-  <script src="questionnaires.js?v=2.0"></script>
-  <script src="translations.js?v=2.0"></script>
-  <script src="app.js?v=2.0"></script>
+  <script src="questionnaires.js"></script>
+  <script src="translations.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Register Service Worker for PWA + auto-updates
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(reg => {
+        // Check for updates every 60 seconds
+        setInterval(() => reg.update(), 60000);
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'activated') {
+              // New version available — reload silently
+              window.location.reload();
+            }
+          });
+        });
+      });
+    }
+  </script>
 </body>
 
 </html>

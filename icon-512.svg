@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e1a"/>
+      <stop offset="100%" stop-color="#151b2e"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="50%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="#a78bfa" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Brain/Mind icon -->
+  <g transform="translate(256, 240)" filter="url(#shadow)">
+    <!-- Left hemisphere -->
+    <path d="M-10,-90 C-60,-90 -100,-60 -100,-10 C-100,20 -85,40 -65,52 C-75,65 -70,85 -50,95 C-35,102 -15,100 -10,90" 
+          fill="none" stroke="url(#glow)" stroke-width="8" stroke-linecap="round"/>
+    <!-- Right hemisphere -->
+    <path d="M10,-90 C60,-90 100,-60 100,-10 C100,20 85,40 65,52 C75,65 70,85 50,95 C35,102 15,100 10,90" 
+          fill="none" stroke="url(#glow)" stroke-width="8" stroke-linecap="round"/>
+    <!-- Center line -->
+    <line x1="0" y1="-90" x2="0" y2="90" stroke="url(#glow)" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+    <!-- Neural connections -->
+    <circle cx="-45" cy="-40" r="5" fill="#a78bfa" opacity="0.8"/>
+    <circle cx="45" cy="-40" r="5" fill="#a78bfa" opacity="0.8"/>
+    <circle cx="-55" cy="20" r="4" fill="#c084fc" opacity="0.7"/>
+    <circle cx="55" cy="20" r="4" fill="#c084fc" opacity="0.7"/>
+    <circle cx="-35" cy="65" r="4" fill="#818cf8" opacity="0.7"/>
+    <circle cx="35" cy="65" r="4" fill="#818cf8" opacity="0.7"/>
+    <!-- Pulse/screen line -->
+    <path d="M-70,110 L-30,110 L-15,85 L0,130 L15,95 L30,110 L70,110" 
+          fill="none" stroke="#a78bfa" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  </g>
+  <!-- App name -->
+  <text x="256" y="420" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" 
+        font-size="42" font-weight="700" fill="#a78bfa" letter-spacing="3">MINDSCREEN</text>
+</svg>
