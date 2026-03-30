@@ -132,7 +132,7 @@
 
         // Questions intro
         $('questionsIntro').innerHTML = q.timeframe
-            ? `<p><strong>${isSpanish && q.timeframe_es ? q.timeframe_es : q.timeframe}</strong>, ${isSpanish ? "con qué frecuencia le ha molestado lo siguiente:" : "how often have you been bothered by the following?"}</p>`
+            ? `<p><strong>${t(q.timeframe)}</strong>, ${isSpanish ? "con qué frecuencia le ha molestado lo siguiente:" : "how often have you been bothered by the following?"}</p>`
             : `<p>${isSpanish ? "Por favor responda cada pregunta a continuación:" : "Please answer each question below:"}</p>`;
 
         // Questions
@@ -143,7 +143,7 @@
 
         // Submit Button (inserted at end of questions)
         const submitHtml = `<div class="question-block" style="text-align: center; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 32px;">
-            <button id="patientSubmitBtn" class="btn-primary" style="font-size:18px; padding:16px 40px;" disabled>${t("Save & Submit") || (isSpanish ? "Guardar y Enviar" : "Save & Submit")}</button>
+            <button id="patientSubmitBtn" class="btn-primary" style="font-size:18px; padding:16px 40px;" disabled>${isSpanish ? "Guardar y Enviar" : "Save & Submit"}</button>
         </div>`;
         $('questionsContainer').insertAdjacentHTML('beforeend', submitHtml);
         $('patientSubmitBtn').addEventListener('click', handlePatientSubmit);
@@ -223,7 +223,7 @@
                 return `<button class="option-btn${isSel}" data-q="bonus" data-val="${i}" data-oi="${i}">${t(o)}</button>`;
             }).join('');
             html += `<div class="bonus-question">
-        <div class="bonus-badge">Bonus — ${t("Functional Impairment") || "Functional Impairment"}</div>
+        <div class="bonus-badge">${isSpanish ? "Bonus — Deterioro Funcional" : "Bonus — Functional Impairment"}</div>
         <p class="q-text">${t(q.bonusQuestion.text)}</p>
         <div class="options-grid">${bOpts}</div>
       </div>`;
