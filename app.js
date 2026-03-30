@@ -205,9 +205,10 @@
         q.questions.forEach((text, i) => {
             const opts = q.optionsByQuestion ? q.optionsByQuestion[i] : q.options;
 
-            const optHtml = opts.map((o, oi) =>
-                `<button class="option-btn" data-q="${i}" data-val="${o.value}" data-oi="${oi}">${t(o.label)}</button>`
-            ).join('');
+            const optHtml = opts.map((o, oi) => {
+                const isSel = answers[i] === o.value ? ' selected' : '';
+                return `<button class="option-btn${isSel}" data-q="${i}" data-val="${o.value}" data-oi="${oi}">${t(o.label)}</button>`;
+            }).join('');
             html += `<div class="question-block" style="animation-delay:${i * 0.05}s">
         <div class="q-number">${isSpanish ? "Pregunta" : "Question"} ${i + 1}</div>
         <p class="q-text">${t(text)}</p>
@@ -217,9 +218,10 @@
 
         // Bonus question
         if (q.bonusQuestion) {
-            const bOpts = q.bonusQuestion.options.map((o, i) =>
-                `<button class="option-btn" data-q="bonus" data-val="${i}" data-oi="${i}">${t(o)}</button>`
-            ).join('');
+            const bOpts = q.bonusQuestion.options.map((o, i) => {
+                const isSel = answers['bonus'] === i ? ' selected' : '';
+                return `<button class="option-btn${isSel}" data-q="bonus" data-val="${i}" data-oi="${i}">${t(o)}</button>`;
+            }).join('');
             html += `<div class="bonus-question">
         <div class="bonus-badge">Bonus — ${t("Functional Impairment") || "Functional Impairment"}</div>
         <p class="q-text">${t(q.bonusQuestion.text)}</p>
@@ -236,9 +238,10 @@
         let html = '<div class="followup-section">';
         if (q.followUp.concurrence) {
             const f = q.followUp.concurrence;
-            const opts = f.options.map((o, i) =>
-                `<button class="option-btn" data-q="fu_concurrence" data-val="${i}" data-oi="${i}">${t(o)}</button>`
-            ).join('');
+            const opts = f.options.map((o, i) => {
+                const isSel = followUpAnswers['fu_concurrence'] === i ? ' selected' : '';
+                return `<button class="option-btn${isSel}" data-q="fu_concurrence" data-val="${i}" data-oi="${i}">${t(o)}</button>`;
+            }).join('');
             html += `<div class="question-block">
         <div class="q-number">${isSpanish ? "Seguimiento A" : "Follow-Up A"}</div>
         <p class="q-text">${t(f.text)}</p>
@@ -247,9 +250,10 @@
         }
         if (q.followUp.impairment) {
             const f = q.followUp.impairment;
-            const opts = f.options.map((o, i) =>
-                `<button class="option-btn" data-q="fu_impairment" data-val="${i}" data-oi="${i}">${t(o)}</button>`
-            ).join('');
+            const opts = f.options.map((o, i) => {
+                const isSel = followUpAnswers['fu_impairment'] === i ? ' selected' : '';
+                return `<button class="option-btn${isSel}" data-q="fu_impairment" data-val="${i}" data-oi="${i}">${t(o)}</button>`;
+            }).join('');
             html += `<div class="question-block">
         <div class="q-number">${isSpanish ? "Seguimiento B" : "Follow-Up B"}</div>
         <p class="q-text">${t(f.text)}</p>
@@ -482,6 +486,9 @@
                 intakeLangToggle.innerHTML = isSpanish ? "🇺🇸 Switch to English" : "🇪🇸 Cambiar a Español";
                 const langAsk = $('ui_lang_ask');
                 if (langAsk) langAsk.textContent = isSpanish ? "Prefer English?" : "Prefer Spanish? / ¿Prefiere español?";
+                if (currentQuiz) {
+                    renderCalculator();
+                }
             });
         }
 
