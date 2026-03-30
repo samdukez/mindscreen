@@ -19,7 +19,12 @@
         "Thank You": "Gracias",
         "Your responses have been recorded. Please hand the device back to your clinician.": "Sus respuestas han sido registradas. Por favor, devuelva el dispositivo a su médico."
     };
-    function t(str) { return isSpanish && i18n[str] ? i18n[str] : str; }
+    function t(str) {
+        if (!isSpanish || !str) return str;
+        if (i18n[str]) return i18n[str];
+        if (typeof DICTIONARY_ES !== 'undefined' && DICTIONARY_ES[str]) return DICTIONARY_ES[str];
+        return str;
+    }
 
     // ─── DOM Cache ───
     const $ = id => document.getElementById(id);
@@ -196,19 +201,16 @@
 
     function renderQuestions(q) {
         let html = '';
-        const questionsList = isSpanish && q.questions_es ? q.questions_es : q.questions;
 
-        questionsList.forEach((text, i) => {
-            const optsSource = isSpanish && q.optionsByQuestion_es ? q.optionsByQuestion_es : q.optionsByQuestion;
-            const fallbackOpts = isSpanish && q.options_es ? q.options_es : q.options;
+        q.questions.forEach((text, i) => {
+            const opts = q.optionsByQuestion ? q.optionsByQuestion[i] : q.options;
 
-            const opts = optsSource ? optsSource[i] : fallbackOpts;
             const optHtml = opts.map((o, oi) =>
-                `<button class="option-btn" data-q="${i}" data-val="${o.value}" data-oi="${oi}">${o.label}</button>`
+                `<button class="option-btn" data-q="${i}" data-val="${o.value}" data-oi="${oi}">${t(o.label)}</button>`
             ).join('');
             html += `<div class="question-block" style="animation-delay:${i * 0.05}s">
         <div class="q-number">${isSpanish ? "Pregunta" : "Question"} ${i + 1}</div>
-        <p class="q-text">${text}</p>
+        <p class="q-text">${t(text)}</p>
         <div class="options-grid">${optHtml}</div>
       </div>`;
         });
@@ -216,11 +218,11 @@
         // Bonus question
         if (q.bonusQuestion) {
             const bOpts = q.bonusQuestion.options.map((o, i) =>
-                `<button class="option-btn" data-q="bonus" data-val="${i}" data-oi="${i}">${o}</button>`
+                `<button class="option-btn" data-q="bonus" data-val="${i}" data-oi="${i}">${t(o)}</button>`
             ).join('');
             html += `<div class="bonus-question">
-        <div class="bonus-badge">Bonus — Functional Impairment</div>
-        <p class="q-text">${q.bonusQuestion.text}</p>
+        <div class="bonus-badge">Bonus — ${t("Functional Impairment") || "Functional Impairment"}</div>
+        <p class="q-text">${t(q.bonusQuestion.text)}</p>
         <div class="options-grid">${bOpts}</div>
       </div>`;
         }
@@ -235,22 +237,22 @@
         if (q.followUp.concurrence) {
             const f = q.followUp.concurrence;
             const opts = f.options.map((o, i) =>
-                `<button class="option-btn" data-q="fu_concurrence" data-val="${i}" data-oi="${i}">${o}</button>`
+                `<button class="option-btn" data-q="fu_concurrence" data-val="${i}" data-oi="${i}">${t(o)}</button>`
             ).join('');
             html += `<div class="question-block">
-        <div class="q-number">Follow-Up A</div>
-        <p class="q-text">${f.text}</p>
+        <div class="q-number">${isSpanish ? "Seguimiento A" : "Follow-Up A"}</div>
+        <p class="q-text">${t(f.text)}</p>
         <div class="options-grid">${opts}</div>
       </div>`;
         }
         if (q.followUp.impairment) {
             const f = q.followUp.impairment;
             const opts = f.options.map((o, i) =>
-                `<button class="option-btn" data-q="fu_impairment" data-val="${i}" data-oi="${i}">${o}</button>`
+                `<button class="option-btn" data-q="fu_impairment" data-val="${i}" data-oi="${i}">${t(o)}</button>`
             ).join('');
             html += `<div class="question-block">
-        <div class="q-number">Follow-Up B</div>
-        <p class="q-text">${f.text}</p>
+        <div class="q-number">${isSpanish ? "Seguimiento B" : "Follow-Up B"}</div>
+        <p class="q-text">${t(f.text)}</p>
         <div class="options-grid">${opts}</div>
       </div>`;
         }
